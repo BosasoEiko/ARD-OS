@@ -12,7 +12,7 @@ File mem, tmp, exe;  //Virtual memory //File for programs //TEMP: to test compil
 void setup() {
   Serial.begin(9600);
   SD.begin();
-  Serial.println("\n\nExecuting program...");
+  Serial.print("Starting timer...\n");
   uint32_t timer = millis();
 
   SD.remove("exe");
@@ -32,15 +32,15 @@ void setup() {
   ftype(exe, 2);
   Serial.print("\n\n");
 
-  load(exe, mem, 0);
+  load(exe, 0);
   ftype(mem, 2);
 
-  
+
   tmp.close();
   mem.close();
   exe.close();
 
-  Serial.println("\n\nProgram executed in " + String(millis() - timer) + " ms");
+  Serial.print("\n\nSetup completed in " + String(millis() - timer) + " ms\n");
 }
 
 void loop() {

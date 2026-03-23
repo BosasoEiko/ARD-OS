@@ -76,10 +76,47 @@ void assemble(File &src, File &dst) {
   }
 }
 
-void load(File &src, File &dst,  uint32_t pos) {  //Loads executable in a defined position in memory (TODO: automatic memory sectors)
-  dst.seekSet(pos);
-  fwrites(dst, pos + 4 * 4, 4);               //Program pointer: next instruction to be executed
-  fwrites(dst, pos + 4 * 4 + src.size(), 4);  //Memory pointer: next free memory byte
-  fwrites(dst, pos + 4 * 4 + src.size(), 4);  //Memory base pointer: start of the memory
-  fcopy(src, dst);                            //Stores the program in memory
+#define PTR_SIZE 4                       //Size in bytes of the pointers
+#define HDR_COUNT 3                      //Number of pointers in the header
+#define HDR_SIZE (HDR_COUNT * PTR_SIZE)  //Number of bytes of the header in memory (n° of pointers * 4 bytes)
+
+void load(File &exe, const uint32_t pos) {  //Loads executable in a defined position in memory (TODO: automatic memory sectors)
+  mem.seekSet(pos);
+
+  fwrites(mem, pos + HDR_SIZE, 4);               //Program pointer: next instruction to be executed
+  fwrites(mem, pos + HDR_SIZE + exe.size(), 4);  //Memory pointer: next free memory byte
+  fwrites(mem, pos + HDR_SIZE + exe.size(), 4);  //Memory base pointer: start of the memory
+  fcopy(exe, mem);                               //Stores the program in memory
+}
+
+void execute(const uint32_t start) {  //Executes an instruction of a program loaded in memory, with its memory space starting at start
+  mem.seekSet(start);
+
+  uint32_t progPtr = freads(mem, 4);  //Reads the program pointer
+  uint32_t progPtrPos = start;        //Position in memory of the program pointer
+
+  uint32_t progBasePtr = start + HDR_SIZE;         //Calculates the program base pointer
+  uint32_t progBasePtrPos = start + PTR_SIZE * 1;  //Position in memory of the program base pointer
+
+  uint32_t memPtr = freads(mem, 4);           //Reads the memory pointer
+  uint32_t memPtrPos = start + PTR_SIZE * 2;  //Position in memory of the memory pointer
+
+  uint32_t memBasePtr = freads(mem, 4);           //Reads the memory base pointer
+  uint32_t memBasePtrPos = start + PTR_SIZE * 3;  //Position in memory of the memory base pointer
+
+  mem.seekSet(progPtr);
+  uint32_t inst[7] = {
+    freads(mem, 1),  //op
+    freads(mem, 1),  //type 1
+    freads(mem, 4),  //data 1
+    freads(mem, 1),  //type 2
+    freads(mem, 4),  //data 2
+    freads(mem, 1),  //type 3
+    freads(mem, 4),  //data 3
+  }
+
+  switch (inst[0]) {
+    default:
+      break;
+  }
 }

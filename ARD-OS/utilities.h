@@ -1,4 +1,4 @@
-void frag(String str) {
+void frag(String str) {  //For testing purposes
   String inst[7];
   uint8_t saving = 0;  //7 = end
   char c;
