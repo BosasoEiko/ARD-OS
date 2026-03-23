@@ -1,13 +1,13 @@
-enum instSet {
-  NOI,  //No instruction
-  MOV,
+enum instSet {  //Instruction Set
+  NOI,          //No instruction
+  MOV,          //MOV ptr, val
   JMP,
-  ADD,
-  SUB,
-  MUL,
-  DIV,
-  POW,
-  ROOT
+  ADD,  //ADD ptr, val, val
+  SUB,  //SUB ptr, val, val
+  MUL,  //MUL ptr, val, val
+  DIV,  //DIV ptr, val, val
+  POW,  //POW ptr, val, val
+  ROOT  //ROOT ptr, val, val
 };
 
 enum dataSet {  //For pointer variants += 0b1000000 or += 128 or += 0x80

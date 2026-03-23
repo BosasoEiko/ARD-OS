@@ -10,6 +10,16 @@ uint32_t btoi(String s) {  //Binary to uint32_t
   return strtoul(s.substring((s.length() - 32) * (s.length() >= 32)).c_str(), NULL, 2);
 }
 
-uint32_t stoi(String s) {
+uint32_t stoi(String s) {  //String to uint32_t (to use for integers)
   return strtoll(s.c_str(), NULL, 10);
+}
+
+String itoh(uint32_t i, uint8_t size) {  //Integer to 8 chars hexadecimal string
+  String base = "";
+  for (uint8_t j = size; j > 0; j -= 1) base += "00";
+  String hex = String(i, 16);
+  base.remove(size * 2 - hex.length());
+  base += hex;
+  base.toUpperCase();
+  return base;
 }
