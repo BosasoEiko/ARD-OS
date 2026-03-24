@@ -1,3 +1,5 @@
+#define SET_SIZE 1  //Size in bytes of the sets (dataSet, instSet)
+
 enum instSet {  //Instruction Set
   NOI,          //No instruction
   MOV,          //MOV ptr, val

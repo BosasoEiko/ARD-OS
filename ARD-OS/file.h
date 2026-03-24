@@ -1,3 +1,9 @@
+#include <SPI.h>
+#include <SdFat.h>
+SdFat SD;
+File mem, tmp, exe;  //Virtual memory //File for programs //TEMP: to test compilers
+//File sectors;  //Division of memory (UNUSED)
+
 //---------- fwrite ----------
 
 void fwrites(File &file, const uint32_t val, const uint8_t size) {  //File write with size

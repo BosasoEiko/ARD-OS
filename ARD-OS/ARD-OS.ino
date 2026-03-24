@@ -1,12 +1,6 @@
-#include <SPI.h>
-#include <SdFat.h>
-SdFat SD;
-File mem, tmp, exe;  //Virtual memory //File for programs //TEMP: to test compilers
-//File sectors;  //Division of memory (UNUSED)
-
-#include "set.h"
-#include "conversions.h"
 #include "file.h"
+#include "conversions.h"
+#include "set.h"
 #include "program.h"
 
 void setup() {
