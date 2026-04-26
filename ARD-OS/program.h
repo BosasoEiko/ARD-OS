@@ -1,4 +1,13 @@
+#define INST_SIZE 16  //Byte size of a full instruction
+
 void assemble(File &src, File &dst) {
+
+  debug("Start assemble()\n");
+
+  SD.remove("alias");
+  File alias = SD.open("alias", (O_CREAT | O_RDWR));  //[ ALIAS ] [ VALUE ]
+  uint32_t line = 0;                                  //Line counter
+
   src.rewind();
 
   while (src.available()) {
@@ -6,7 +15,7 @@ void assemble(File &src, File &dst) {
     String inst[7];  //[ INST ], [ DATA TYPE ] [ DATA ], [ DATA TYPE ] [ DATA ], [ DATA TYPE ] [ DATA ]
     uint8_t saving = 0;
     char c;
-    bool string = false, special = false, start = false;
+    bool string = false, special = false, start = false, jump = false;
 
     while (src.available() && (c = src.read()) != '\n') {
       //Serial.print("i: " + String(i) + "; saving: " + String(saving) + "\n");
@@ -51,9 +60,16 @@ void assemble(File &src, File &dst) {
       inst[saving] += c;     //Save the char to the correct parameter
     }
 
+    if (inst[0].charAt(0) == '.') {                                                //Syntax for a jump alias
+      alias.print(inst[0].substring(1) + " " + itoh(line * INST_SIZE, 4) + "\n");  //[ ALIAS ] [ VALUE ]
+      continue;                                                                    //Skip the line counter
+    }
+
     fwrites(dst, instCode(inst[0]), 1);  //Write the instruction code
 
     for (uint8_t i = 1; i < 7; i += 2) {
+
+      inst[i] = ffind(alias, inst[i]); //Searches for an alias (that doesn't exist) for the current parameter
 
       if (inst[i].charAt(0) == '@') fwrites(dst, dataCode(inst[i].substring(1)) + 128, 1);  //Write data type
       else fwrites(dst, dataCode(inst[i]), 1);                                              //@U8 -> U8 -> dataCode -> += 128 -> dst ELSE U8 -> dataCode -> dst
@@ -73,7 +89,11 @@ void assemble(File &src, File &dst) {
           break;
       }
     }
+
+    line += 1;
   }
+
+  debug("End assemble()\n");
 }
 
 #define PTR_SIZE 4  //Size in bytes of the pointers
@@ -125,7 +145,7 @@ void execute(const uint32_t start) {  //Executes an instruction of a program loa
     freads(mem, PTR_SIZE),  //data 2
     freads(mem, SET_SIZE),  //type 3
     freads(mem, PTR_SIZE),  //data 3
-  }
+  };
 
   switch (inst[0]) {
     default:

@@ -53,3 +53,9 @@ void frag(String str) {  //For testing purposes
   Serial.println("(" + inst[3] + ") [" + inst[4] + "]");
   Serial.println("(" + inst[5] + ") [" + inst[6] + "]");
 }
+
+void debug(const String s) {
+#ifdef DEBUG
+  Serial.print(s);
+#endif
+}

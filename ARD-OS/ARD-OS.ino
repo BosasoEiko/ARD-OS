@@ -1,5 +1,8 @@
-#include "file.h"
+#define DEBUG
+
+#include "utilities.h"
 #include "conversions.h"
+#include "file.h"
 #include "set.h"
 #include "program.h"
 
@@ -16,7 +19,7 @@ void setup() {
   mem = SD.open("mem", (O_CREAT | O_RDWR));
   tmp = SD.open("tmp", (O_CREAT | O_RDWR));
 
-  tmp.print("ADD @u32 x0a00000a, i32 456643654123893999, u8 xAFFAB11B; BOMBAAAA\nSUB u32 x000a, f32 f12389.3987, u8 x-a; BOMBOKLAT\n");
+  tmp.print("ADD @u32 x0a00000a, i32 456643654123893999, u8 xAFFAB11B; BOMBAAAA\n.jump\nSUB u32 x000a, f32 f12389.3987, u8 jump; BOMBOKLAT\n");
   ftype(tmp, 0);
   Serial.print("\n\n");
 
