@@ -18,7 +18,9 @@ String itoh(const uint32_t i, const uint8_t size) {  //Integer to 8 chars hexade
   String base = "";
   for (uint8_t j = size; j > 0; j -= 1) base += "00";
   String hex = String(i, 16);
-  base.remove(size * 2 - hex.length());
+  uint32_t len = hex.length();
+  base.remove((size * 2 - len) * (len <= size * 2));    //Removes everything but the first bytes needed
+  hex.remove(0, (len - size * 2) * (size * 2 <= len));  //Removes everything but the last bytes needed
   base += hex;
   base.toUpperCase();
   return base;

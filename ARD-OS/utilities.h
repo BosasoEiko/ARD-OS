@@ -59,3 +59,18 @@ void debug(const String s) {
   Serial.print(s);
 #endif
 }
+
+// Bit operations
+
+void bitset(uint32_t &val, uint8_t bit) {
+  val = val | 1 << bit;
+}
+void bitclr(uint32_t &val, uint8_t bit) {
+  val = val & ~(1 << bit);
+}
+void bittgl(uint32_t &val, uint8_t bit) {
+  val = val ^ 1 << bit;
+}
+uint32_t bitget(uint32_t val, uint8_t bit) {
+  return val & (1 << bit);
+}
