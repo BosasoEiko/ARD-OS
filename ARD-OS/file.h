@@ -1,8 +1,6 @@
 #include <SPI.h>
 #include <SdFat.h>
 SdFat SD;
-File mem, tmp, exe;  //Virtual memory //File for programs //TEMP: to test compilers
-//File sectors;  //Division of memory (UNUSED)
 
 //ret: true = return to previous position (default = false)
 

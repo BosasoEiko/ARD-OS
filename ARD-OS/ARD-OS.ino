@@ -5,7 +5,10 @@
 #include "file.h"
 #include "set.h"
 #include "compiler.h"
+#include "memory.h"
 #include "program.h"
+
+File exe;  //File for programs
 
 void setup() {
   Serial.begin(9600);
@@ -15,7 +18,6 @@ void setup() {
 
   File obj = fclear("obj");
   File exe = fclear("exe");
-  File mem = fclear("mem");
   File tmp = fclear("tmp");
 
   tmp.print("ADD @u32 x0a00000a, i32 456643654123893999, u8 xAFFAB11B; BOMBAAAA\n.jump\nSUB u32 x000a, f32 f12389.3987, u8 @jump; BOMBOKLAT\n");
@@ -66,10 +68,10 @@ void setup() {
 
   tmp.close();
   obj.close();
-  mem.close();
   exe.close();
 
   Serial.print("\n\nSetup completed in " + String(millis() - timer) + " ms\n");
+  mem.close();  //Memory closes last
 }
 
 void loop() {
